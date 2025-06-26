@@ -1,0 +1,170 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 800px;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"font": {"color": "white"}, "group": 1, "id": "AI Copilots", "label": "AI Copilots", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 2, "id": "Large Language Models", "label": "Large Language Models", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 1, "id": "structured reasoning", "label": "structured reasoning", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 2, "id": "enterprise AI ecosystems", "label": "enterprise AI ecosystems", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 2, "id": "Security Verification", "label": "Security Verification", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 2, "id": "Agent", "label": "Agent", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 2, "id": "frontier", "label": "frontier", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 1, "id": "MMSearch-R1", "label": "MMSearch-R1", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 2, "id": "new benchmark", "label": "new benchmark", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 1, "id": "Perspective", "label": "Perspective", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 2, "id": "performance", "label": "performance", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 2, "id": "Multitask Language Understanding", "label": "Multitask Language Understanding", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 1, "id": "Malte Probst", "label": "Malte Probst", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 1, "id": "Vision Language Model", "label": "Vision Language Model", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 1, "id": "Mobile-R1", "label": "Mobile-R1", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 2, "id": "comprehend intricate instructions", "label": "comprehend intricate instructions", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 2, "id": "multi-turn generate action", "label": "multi-turn generate action", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 1, "id": "TAPS", "label": "TAPS", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 1, "id": "Programming Education", "label": "Programming Education", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 1, "id": "Generative AI", "label": "Generative AI", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 1, "id": "Multimodal Learning", "label": "Multimodal Learning", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 1, "id": "representation learning", "label": "representation learning", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 2, "id": "neural architecture search", "label": "neural architecture search", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 1, "id": "Client-Specific Tokens", "label": "Client-Specific Tokens", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 2, "id": "investment vehicles in Federated Learning", "label": "investment vehicles in Federated Learning", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 1, "id": "Automated Market Makers", "label": "Automated Market Makers", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 2, "id": "a way to distribute rewards", "label": "a way to distribute rewards", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 1, "id": "AI Agent", "label": "AI Agent", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 1, "id": "A", "label": "A", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 1, "id": "PETSc", "label": "PETSc", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 1, "id": "Memento", "label": "Memento", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 2, "id": "Meta-strategy that brings planning and memory into language model behavior by coordinating multiple LLM calls.", "label": "Meta-strategy that brings planning and memory into language model behavior by coordinating multiple LLM calls.", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 1, "id": "LLMs", "label": "LLMs", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 2, "id": "mechanisms for planning, tracking intermediate steps, and integrating information across multiple reasoning stages.", "label": "mechanisms for planning, tracking intermediate steps, and integrating information across multiple reasoning stages.", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 1, "id": "MuSiQue", "label": "MuSiQue", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 2, "id": "Improves ReAct by more than 3 F1 percentage points, demonstrating its utility in agentic settings.", "label": "Improves ReAct by more than 3 F1 percentage points, demonstrating its utility in agentic settings.", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 1, "id": "CoT", "label": "CoT", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 2, "id": "of chain-of-thought (CoT) when all information is provided in context.", "label": "of chain-of-thought (CoT) when all information is provided in context.", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 1, "id": "IRCoT", "label": "IRCoT", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 2, "id": "over the multi-hop RAG baseline.", "label": "over the multi-hop RAG baseline.", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 1, "id": "Polaroids", "label": "Polaroids", "shape": "dot", "size": 10}, {"font": {"color": "white"}, "group": 2, "id": "of knowledge that allow him to reason about the world and pursue long-term goals despite his cognitive limitations.", "label": "of knowledge that allow him to reason about the world and pursue long-term goals despite his cognitive limitations.", "shape": "dot", "size": 10}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "AI Copilots", "label": "uses", "to": "Large Language Models", "width": 1}, {"arrows": "to", "from": "Large Language Models", "label": "uses", "to": "structured reasoning", "width": 1}, {"arrows": "to", "from": "Large Language Models", "label": "uses", "to": "enterprise AI ecosystems", "width": 1}, {"arrows": "to", "from": "Large Language Models", "label": "uses", "to": "Security Verification", "width": 1}, {"arrows": "to", "from": "Large Language Models", "label": "uses", "to": "Agent", "width": 1}, {"arrows": "to", "from": "Large Language Models", "label": "is a", "to": "frontier", "width": 1}, {"arrows": "to", "from": "MMSearch-R1", "label": "is a", "to": "new benchmark", "width": 1}, {"arrows": "to", "from": "Perspective", "label": "uses", "to": "Large Language Models", "width": 1}, {"arrows": "to", "from": "structured reasoning", "label": "enhances", "to": "performance", "width": 1}, {"arrows": "to", "from": "Multitask Language Understanding", "label": "is a", "to": "Multitask Language Understanding", "width": 1}, {"arrows": "to", "from": "Malte Probst", "label": "uses", "to": "Large Language Models", "width": 1}, {"arrows": "to", "from": "Vision Language Model", "label": "uses", "to": "Mobile-R1", "width": 1}, {"arrows": "to", "from": "Vision Language Model", "label": "not only", "to": "comprehend intricate instructions", "width": 1}, {"arrows": "to", "from": "Mobile-R1", "label": "is a", "to": "new benchmark", "width": 1}, {"arrows": "to", "from": "Mobile-R1", "label": "not only", "to": "multi-turn generate action", "width": 1}, {"arrows": "to", "from": "TAPS", "label": "uses", "to": "Large Language Models", "width": 1}, {"arrows": "to", "from": "Programming Education", "label": "uses", "to": "Large Language Models", "width": 1}, {"arrows": "to", "from": "Generative AI", "label": "uses", "to": "Large Language Models", "width": 1}, {"arrows": "to", "from": "Multimodal Learning", "label": "uses", "to": "representation learning", "width": 1}, {"arrows": "to", "from": "representation learning", "label": "includes", "to": "neural architecture search", "width": 1}, {"arrows": "to", "from": "Client-Specific Tokens", "label": "is a", "to": "investment vehicles in Federated Learning", "width": 1}, {"arrows": "to", "from": "Automated Market Makers", "label": "are", "to": "a way to distribute rewards", "width": 1}, {"arrows": "to", "from": "AI Agent", "label": "uses", "to": "Large Language Models", "width": 1}, {"arrows": "to", "from": "A", "label": "is a", "to": "new benchmark", "width": 1}, {"arrows": "to", "from": "PETSc", "label": "uses", "to": "Large Language Models", "width": 1}, {"arrows": "to", "from": "Memento", "label": "introduce", "to": "Meta-strategy that brings planning and memory into language model behavior by coordinating multiple LLM calls.", "width": 1}, {"arrows": "to", "from": "LLMs", "label": "lack", "to": "mechanisms for planning, tracking intermediate steps, and integrating information across multiple reasoning stages.", "width": 1}, {"arrows": "to", "from": "MuSiQue", "label": "dataset", "to": "Improves ReAct by more than 3 F1 percentage points, demonstrating its utility in agentic settings.", "width": 1}, {"arrows": "to", "from": "CoT", "label": "doubles the performance", "to": "of chain-of-thought (CoT) when all information is provided in context.", "width": 1}, {"arrows": "to", "from": "IRCoT", "label": "more than", "to": "over the multi-hop RAG baseline.", "width": 1}, {"arrows": "to", "from": "Polaroids", "label": "External traces", "to": "of knowledge that allow him to reason about the world and pursue long-term goals despite his cognitive limitations.", "width": 1}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
